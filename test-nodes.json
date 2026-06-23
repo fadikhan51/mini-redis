@@ -1,0 +1,63 @@
+{
+  "currentEpoch": 0,
+  "myNodeId": "test-node-1",
+  "nodes": {
+    "test-node-1": {
+      "nodeId": "test-node-1",
+      "host": "127.0.0.1",
+      "redisPort": 6379,
+      "httpPort": 8080,
+      "busPort": 18080,
+      "role": "master",
+      "replicaOfNodeId": null,
+      "flags": [
+        "myself"
+      ],
+      "status": "connected",
+      "slots": [
+        12182
+      ],
+      "slotRanges": [],
+      "configEpoch": 0,
+      "lastPingAt": 0,
+      "lastPongAt": 0,
+      "createdAt": 1782209608599,
+      "updatedAt": 1782209608599
+    },
+    "other-node": {
+      "nodeId": "other-node",
+      "host": "127.0.0.1",
+      "redisPort": 7001,
+      "httpPort": 8001,
+      "role": "master",
+      "replicaOfNodeId": null,
+      "flags": [],
+      "status": "connected",
+      "slots": [
+        13213
+      ],
+      "slotRanges": [],
+      "configEpoch": 0,
+      "lastPingAt": 0,
+      "lastPongAt": 0,
+      "createdAt": 0,
+      "updatedAt": 0
+    }
+  },
+  "shards": {},
+  "slotMap": {
+    "12182": {
+      "slot": 12182,
+      "nodeId": "test-node-1",
+      "state": "stable",
+      "updatedAt": 1782209708345
+    },
+    "13213": {
+      "slot": 13213,
+      "nodeId": "other-node",
+      "state": "stable",
+      "updatedAt": 1782209708346
+    }
+  },
+  "version": 12
+}

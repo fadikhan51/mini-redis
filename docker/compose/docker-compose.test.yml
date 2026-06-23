@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  test-runner:
+    build:
+      context: ../../
+      dockerfile: docker/app/Dockerfile
+      target: builder
+    command: npm run test:e2e
+    env_file:
+      - ../../.env.test
+    environment:
+      - MINISTACK_ENABLED=true
+      - MINISTACK_ENDPOINT=http://ministack:4566
+      - HTTP_HOST=0.0.0.0
+    depends_on:
+      ministack:
+        condition: service_healthy
+    networks:
+      - mini-redis-test-net
+
+  ministack:
+    image: ${MINISTACK_IMAGE:-ministackorg/ministack:latest}
+    ports:
+      - "4566:4566"
+    environment:
+      - GATEWAY_PORT=4566
+      - MINISTACK_HOST=ministack
+      - MINISTACK_REGION=us-east-1
+      - LOG_LEVEL=INFO
+      - SERVICES=elasticache
+      - ELASTICACHE_BASE_PORT=16379
+      - DOCKER_NETWORK=mini-redis-test-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4566/_ministack/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - mini-redis-test-net
+
+networks:
+  mini-redis-test-net:

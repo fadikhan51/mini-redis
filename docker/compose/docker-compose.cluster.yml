@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  node-1:
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7000:6379"
+      - "8000:8080"
+    environment:
+      - CLUSTER_ENABLED=true
+      - CLUSTER_NODE_ID=node1
+      - CLUSTER_ANNOUNCE_HOST=127.0.0.1
+      - CLUSTER_ANNOUNCE_REDIS_PORT=7000
+      - CLUSTER_ANNOUNCE_HTTP_PORT=8000
+      - CLUSTER_INTERNAL_HOST=0.0.0.0
+      - CLUSTER_INTERNAL_PORT=18080
+      - LOG_LEVEL=debug
+    volumes:
+      - node1-data:/data
+
+  node-2:
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7001:6379"
+      - "8001:8080"
+    environment:
+      - CLUSTER_ENABLED=true
+      - CLUSTER_NODE_ID=node2
+      - CLUSTER_ANNOUNCE_HOST=127.0.0.1
+      - CLUSTER_ANNOUNCE_REDIS_PORT=7001
+      - CLUSTER_ANNOUNCE_HTTP_PORT=8001
+      - CLUSTER_INTERNAL_HOST=0.0.0.0
+      - CLUSTER_INTERNAL_PORT=18080
+      - LOG_LEVEL=debug
+    volumes:
+      - node2-data:/data
+
+  node-3:
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "7002:6379"
+      - "8002:8080"
+    environment:
+      - CLUSTER_ENABLED=true
+      - CLUSTER_NODE_ID=node3
+      - CLUSTER_ANNOUNCE_HOST=127.0.0.1
+      - CLUSTER_ANNOUNCE_REDIS_PORT=7002
+      - CLUSTER_ANNOUNCE_HTTP_PORT=8002
+      - CLUSTER_INTERNAL_HOST=0.0.0.0
+      - CLUSTER_INTERNAL_PORT=18080
+      - LOG_LEVEL=debug
+    volumes:
+      - node3-data:/data
+
+  cluster-init:
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile
+    command: npm run cluster:init
+    depends_on:
+      - node-1
+      - node-2
+      - node-3
+
+volumes:
+  node1-data:
+  node2-data:
+  node3-data:
